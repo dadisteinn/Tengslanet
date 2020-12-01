@@ -1,6 +1,8 @@
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const userService = () => {
   const registerUser = async (body, successCb, errorCb) => {
@@ -34,7 +36,21 @@ const userService = () => {
     await user.save();
 
     // Return jsonwebtoken
-    successCb(user);
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWTSECRET,
+      { expiresIn: 3600 },
+      (err, token) => {
+        if (err) throw err;
+        successCb(token);
+      }
+    );
   };
 
   return {

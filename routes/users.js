@@ -25,8 +25,8 @@ router.post(
 
     userService.registerUser(
       req.body,
-      function (result) {
-        return res.send("User registered");
+      function (token) {
+        return res.json({ token });
       },
       function (err) {
         if (err.code) {
