@@ -45,7 +45,7 @@ const userService = () => {
     jwt.sign(
       payload,
       process.env.JWTSECRET,
-      { expiresIn: 3600 },
+      { expiresIn: 360000 }, // TODO: remove two zeroes
       (err, token) => {
         if (err) throw err;
         successCb(token);
