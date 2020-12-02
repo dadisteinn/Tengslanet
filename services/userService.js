@@ -5,13 +5,13 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const userService = () => {
-  const registerUser = async (body, successCb, errorCb) => {
+  const registerUser = async (body) => {
     const { name, email, password } = body;
 
     // Check if user exists
     let user = await User.findOne({ email });
     if (user) {
-      errorCb({ code: 400, err: { errors: [{ msg: "User already exists" }] } });
+      return { code: 400, err: { errors: [{ msg: "User already exists" }] } };
     }
 
     // Get users gravatar
@@ -42,14 +42,10 @@ const userService = () => {
       },
     };
 
-    jwt.sign(
+    return jwt.sign(
       payload,
       process.env.JWTSECRET,
-      { expiresIn: 360000 }, // TODO: remove two zeroes
-      (err, token) => {
-        if (err) throw err;
-        successCb(token);
-      }
+      { expiresIn: 360000 } // TODO: remove two zeroes
     );
   };
 

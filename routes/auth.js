@@ -9,18 +9,15 @@ const authservice = require("../services/authService");
 // @desc    Test route - Gets authenticated user by token
 // @access  Public
 router.get("/", auth, async (req, res) => {
-  authservice.getAuthUser(
-    req.user.id,
-    function (user) {
-      return res.json(user);
-    },
-    function (err) {
-      if (err.code) {
-        return res.status(err.code).json(err.err);
-      }
-      return res.status(500).send("Server error");
+  try {
+    const user = await authservice.getAuthUser(req.user.id);
+    return res.json(user);
+  } catch (err) {
+    if (err.code) {
+      return res.status(err.code).json(err.err);
     }
-  );
+    return res.status(500).send("Server error");
+  }
 });
 
 // @route   POST api/auth
@@ -32,24 +29,22 @@ router.post(
     check("email", "Please include a valid email").isEmail(),
     check("password", "Password is required").exists(),
   ],
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    authservice.loginUser(
-      req.body,
-      function (token) {
-        return res.json({ token });
-      },
-      function (err) {
-        if (err.code) {
-          return res.status(err.code).json(err.err);
-        }
-        return res.status(500).send("Server error");
+    try {
+      const token = await authservice.loginUser(req.body);
+      console.log(token);
+      return res.json({ token });
+    } catch (err) {
+      if (err.code) {
+        return res.status(err.code).json(err.err);
       }
-    );
+      return res.status(500).send("Server error");
+    }
   }
 );
 
