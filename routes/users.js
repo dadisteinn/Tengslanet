@@ -17,24 +17,21 @@ router.post(
       min: 8,
     }),
   ],
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    userService.registerUser(
-      req.body,
-      function (token) {
-        return res.json({ token });
-      },
-      function (err) {
-        if (err.code) {
-          return res.status(err.code).json(err.err);
-        }
-        return res.status(500).send("Server error");
+    try {
+      const token = await userService.registerUser(req.body);
+      return res.json({ token });
+    } catch (err) {
+      if (err.code) {
+        return res.status(err.code).json(err.err);
       }
-    );
+      return res.status(500).send("Server error");
+    }
   }
 );
 
