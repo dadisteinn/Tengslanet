@@ -37,7 +37,6 @@ router.post(
 
     try {
       const token = await authservice.loginUser(req.body);
-      console.log(token);
       return res.json({ token });
     } catch (err) {
       if (err.code) {
