@@ -16,6 +16,7 @@ router.get("/", auth, async (req, res) => {
     if (err.code) {
       return res.status(err.code).json(err.err);
     }
+    console.error(err.message);
     return res.status(500).send("Server error");
   }
 });
@@ -42,6 +43,7 @@ router.post(
       if (err.code) {
         return res.status(err.code).json(err.err);
       }
+      console.error(err.message);
       return res.status(500).send("Server error");
     }
   }
