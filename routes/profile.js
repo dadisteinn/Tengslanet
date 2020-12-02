@@ -197,9 +197,10 @@ router.delete("/education/:eduId", auth, async (req, res) => {
 router.get("/github/:username", async (req, res) => {
   try {
     const data = await profileService.getGitrepos(req.params.username);
-    console.log(data);
-
-    res.status(200).json(data);
+    if (!data) {
+      return res.status(404).json({ msg: "No github profile found" });
+    }
+    return res.status(200).json(data);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server error");

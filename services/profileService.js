@@ -210,16 +210,24 @@ const profileService = () => {
   };
 
   const getGitrepos = async (username) => {
+    // Set the URI witht the username
     const uri = encodeURI(
       `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc`
     );
+    // Get github token
     const headers = {
       "user-agent": "node.js",
       Authorization: `token ${process.env.GITHUBTOKEN}`,
     };
 
-    const gitHubResponse = await axios.get(uri, { headers });
-    return gitHubResponse.data;
+    // Call the github API and return the response data
+    try {
+      const gitHubResponse = await axios.get(uri, { headers });
+      return gitHubResponse.data;
+    } catch (err) {
+      console.error(err.message);
+      return null;
+    }
   };
 
   return {
