@@ -1,5 +1,7 @@
 const Profile = require("../models/Profile");
 const User = require("../models/User");
+const axios = require("axios");
+require("dotenv").config();
 
 const profileService = () => {
   const getProfileFields = (body, userId) => {
@@ -57,6 +59,30 @@ const profileService = () => {
     };
 
     return newExp;
+  };
+
+  const getEducationFields = (body) => {
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    } = body;
+
+    const newEdu = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    };
+
+    return newEdu;
   };
 
   const getUserProfile = async (userId) => {
@@ -117,7 +143,7 @@ const profileService = () => {
     return profile;
   };
 
-  const DeleteProfileById = async (userId) => {
+  const deleteProfileById = async (userId) => {
     // TODO: Remove users posts
 
     // Remove profile
@@ -128,14 +154,72 @@ const profileService = () => {
   };
 
   const addExperience = async (body, userId) => {
+    // Get experience fields from the body
     const newExp = getExperienceFields(body);
 
+    // Add experience to the profile and save
     const profile = await Profile.findOne({ user: userId });
-
     profile.experience.unshift(newExp);
     await profile.save();
 
     return profile;
+  };
+
+  const deleteExperience = async (expId, userId) => {
+    // Get user profile
+    const profile = await Profile.findOne({ user: userId });
+
+    // Get index of item to remove
+    const removieIndex = profile.experience
+      .map((item) => item.id)
+      .indexOf(expId);
+
+    // Remove item and save profile
+    profile.experience.splice(removieIndex, 1);
+    await profile.save();
+
+    return profile;
+  };
+
+  const addEducation = async (body, userId) => {
+    // Get education fields from the body
+    const newEdu = getEducationFields(body);
+
+    // Add education to the profile and save
+    const profile = await Profile.findOne({ user: userId });
+    profile.education.unshift(newEdu);
+    await profile.save();
+
+    return profile;
+  };
+
+  const deleteEducation = async (eduId, userId) => {
+    // Get user profile
+    const profile = await Profile.findOne({ user: userId });
+
+    // Get index of item to remove
+    const removieIndex = profile.education
+      .map((item) => item.id)
+      .indexOf(eduId);
+
+    // Remove item and save profile
+    profile.education.splice(removieIndex, 1);
+    await profile.save();
+
+    return profile;
+  };
+
+  const getGitrepos = async (username) => {
+    const uri = encodeURI(
+      `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc`
+    );
+    const headers = {
+      "user-agent": "node.js",
+      Authorization: `token ${process.env.GITHUBTOKEN}`,
+    };
+
+    const gitHubResponse = await axios.get(uri, { headers });
+    return gitHubResponse.data;
   };
 
   return {
@@ -143,8 +227,12 @@ const profileService = () => {
     createOrUpdateProfile,
     getAllProfiles,
     getProfileByUserId,
-    DeleteProfileById,
+    deleteProfileById,
     addExperience,
+    deleteExperience,
+    addEducation,
+    deleteEducation,
+    getGitrepos,
   };
 };
 
