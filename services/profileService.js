@@ -43,6 +43,22 @@ const profileService = () => {
     return profileFields;
   };
 
+  const getExperienceFields = (body) => {
+    const { title, company, location, from, to, current, description } = body;
+
+    const newExp = {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    };
+
+    return newExp;
+  };
+
   const getUserProfile = async (userId) => {
     const profile = await Profile.findOne({ user: userId }).populate("user", [
       "name",
@@ -57,7 +73,7 @@ const profileService = () => {
     return profile;
   };
 
-  const createProfile = async (body, userId) => {
+  const createOrUpdateProfile = async (body, userId) => {
     const profileFields = getProfileFields(body, userId);
 
     // Find profile based on user id
@@ -111,12 +127,24 @@ const profileService = () => {
     // TODO: blacklist token?
   };
 
+  const addExperience = async (body, userId) => {
+    const newExp = getExperienceFields(body);
+
+    const profile = await Profile.findOne({ user: userId });
+
+    profile.experience.unshift(newExp);
+    await profile.save();
+
+    return profile;
+  };
+
   return {
     getUserProfile,
-    createProfile,
+    createOrUpdateProfile,
     getAllProfiles,
     getProfileByUserId,
     DeleteProfileById,
+    addExperience,
   };
 };
 
