@@ -3,14 +3,15 @@ class NotFoundError extends Error {
     super(item + " not found");
     this.name = "NotFoundError";
     this.status = 404;
-    this.log = this.message;
+    this.log = item + " not found";
   }
 }
 
-class ObjectIdError extends NotFoundError {
+class ObjectIdError extends Error {
   constructor(item) {
-    super(item);
+    super(item + " not found");
     this.name = "ObjectIdError";
+    this.status = 404;
     this.log = "Invalid object id";
   }
 }
@@ -33,9 +34,19 @@ class InvalidCredentialsError extends Error {
   }
 }
 
+class JWTAuthenticationError extends Error {
+  constructor(log) {
+    super("Unauthorized");
+    this.name = "JWTAuthenticationError";
+    this.status = 401;
+    this.log = log;
+  }
+}
+
 module.exports = {
   NotFoundError,
   ObjectIdError,
   ServerError,
   InvalidCredentialsError,
+  JWTAuthenticationError,
 };
