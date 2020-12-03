@@ -18,22 +18,26 @@ const postsService = () => {
   };
 
   const getAllPosts = async () => {
+    // Get all posts and sort them by date
     const posts = await Post.find().sort({ date: -1 });
     return posts;
   };
 
   const getPostById = async (postId) => {
-    // Get the post, throw 404 error of not found
+    // Get post or throw error if not found
     const post = await Post.findById(postId);
     if (!post) {
-      throw { type: "NOTFOUND", err: { msg: "Post not found" } };
+      throw new NotFoundError("Post");
     }
     return post;
   };
 
   const deletePost = async (postId, userId) => {
-    // Remove post
+    // Get post or throw error if not found
     const post = await Post.findById({ postId });
+    if (!post) {
+      throw new NotFoundError("Post");
+    }
 
     // Check if post is owned by user
     if (post.user.toString() !== userId) {
