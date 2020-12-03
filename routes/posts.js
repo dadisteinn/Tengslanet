@@ -11,7 +11,7 @@ const postsService = require("../services/postsService");
 router.post(
   "/",
   [auth, [check("text", "Text is required").not().isEmpty()]],
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -20,9 +20,9 @@ router.post(
     try {
       const post = await postsService.createPost(req.user.id, req.body.text);
       return res.status(201).json(post);
-    } catch (err) {
-      console.error(err);
-      return res.status(500).send("Server error");
+    } catch (error) {
+      error = new ServerError(error.message);
+      next(error);
     }
   }
 );
@@ -30,47 +30,45 @@ router.post(
 // @route   GET api/posts
 // @desc    Get all posts
 // @access  Private
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, async (req, res, next) => {
   try {
     const posts = await postsService.getAllPosts();
     return res.status(200).json(posts);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send("Server error");
+  } catch (error) {
+    error = new ServerError(error.message);
+    next(error);
   }
 });
 
 // @route   POST api/posts/:postId
 // @desc    Get post by id
 // @access  Private
-router.get("/:postId", auth, async (req, res) => {
+router.get("/:postId", auth, async (req, res, next) => {
   try {
     const post = await postsService.getPostById(req.params.postId);
     return res.status(200).json(post);
   } catch (err) {
-    if (err.type === "ObjectId" || err.type === "NOTFOUND") {
-      return res.status(404).json({ msg: "Post not found" });
+    if (error.log) {
+      return next(error);
     }
-    console.error(err);
-    return res.status(500).send("Server error");
+    error = new ServerError(error.message);
+    next(error);
   }
 });
 
 // @route   DELETE api/posts/:postId
 // @desc    Delete a post
 // @access  Private
-router.delete("/:postId", auth, async (req, res) => {
+router.delete("/:postId", auth, async (req, res, next) => {
   try {
     await postsService.deletePost(req.params.postId, req.user.id);
     return res.status(200).json({ msg: "Post deleted" });
-  } catch (err) {
-    if (err.type === "AUTH") {
-      return res.status(401).json(err.err.msg);
-    } else if (err.type === "ObjectId") {
-      return res.status(404).json({ msg: "Post not found" });
+  } catch (error) {
+    if (error.log) {
+      return next(error);
     }
-    console.error(err);
-    return res.status(500).send("Server error");
+    error = new ServerError(error.message);
+    next(error);
   }
 });
 
