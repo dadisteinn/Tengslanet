@@ -3,14 +3,14 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
+const { InvalidCredentialsError, NotFoundError } = require("../errors");
+
 const authService = () => {
   const getAuthUser = async (userId) => {
+    // Find user, throw error if user id is invalid
     const user = await User.findById(userId).select("-password");
     if (!user) {
-      throw {
-        code: 400,
-        err: { errors: [{ msg: "No user exists with this email" }] },
-      };
+      throw new NotFoundError("User");
     }
     return user;
   };
@@ -21,16 +21,16 @@ const authService = () => {
     // Check if user exists
     let user = await User.findOne({ email });
     if (!user) {
-      throw { code: 400, err: { errors: [{ msg: "Invalid credentials" }] } };
+      throw new InvalidCredentialsError("Email is not valid");
     }
 
     // Check if password is correct
     const isCorrect = await bcrypt.compare(password, user.password);
     if (!isCorrect) {
-      throw { code: 400, err: { errors: [{ msg: "Invalid credentials" }] } };
+      throw new InvalidCredentialsError("Password is not valid");
     }
 
-    // Return jsonwebtoken
+    // Create token payload and return jsonwebtoken
     const payload = {
       user: {
         id: user.id,
