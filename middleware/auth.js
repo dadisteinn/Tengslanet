@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const { JWTAuthenticationError } = require("../errors");
+const { JwtTokenError } = require("../errors");
 
 module.exports = function (req, res, next) {
   // Get token from header
@@ -9,7 +9,7 @@ module.exports = function (req, res, next) {
 
   // Check if token exists
   if (!token) {
-    throw new JWTAuthenticationError("No token, authorization denied");
+    throw new JwtTokenError("No token, authorization denied");
   }
 
   // Verify token
@@ -18,6 +18,6 @@ module.exports = function (req, res, next) {
     req.user = decodedToken.user;
     next();
   } catch (err) {
-    throw new JWTAuthenticationError("Token is not valid");
+    throw new JwtTokenError("Token is not valid");
   }
 };
