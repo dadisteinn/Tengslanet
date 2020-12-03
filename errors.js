@@ -34,7 +34,7 @@ class InvalidCredentialsError extends Error {
   }
 }
 
-class JWTAuthenticationError extends Error {
+class JwtTokenError extends Error {
   constructor(log) {
     super("Unauthorized");
     this.name = "JWTAuthenticationError";
@@ -48,5 +48,5 @@ module.exports = {
   ObjectIdError,
   ServerError,
   InvalidCredentialsError,
-  JWTAuthenticationError,
+  JwtTokenError,
 };

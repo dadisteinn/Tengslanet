@@ -3,6 +3,8 @@ const User = require("../models/User");
 const axios = require("axios");
 require("dotenv").config();
 
+const { NotFoundError } = require("../errors");
+
 const profileService = () => {
   const getProfileFields = (body, userId) => {
     const {
@@ -86,15 +88,13 @@ const profileService = () => {
   };
 
   const getUserProfile = async (userId) => {
+    // Get users own profile or throw error ef none is found
     const profile = await Profile.findOne({ user: userId }).populate("user", [
       "name",
       "avatar",
     ]);
     if (!profile) {
-      throw {
-        code: 400,
-        err: { errors: [{ msg: "No profile was found for this user" }] },
-      };
+      throw new NotFoundError("Profile");
     }
     return profile;
   };
@@ -130,15 +130,13 @@ const profileService = () => {
   };
 
   const getProfileByUserId = async (userId) => {
+    // Get user profile or throw error ef none is found
     const profile = await Profile.findOne({ user: userId }).populate("user", [
       "name",
       "avatar",
     ]);
     if (!profile) {
-      throw {
-        code: 400,
-        err: { errors: [{ msg: "Profile not found" }] },
-      };
+      throw new NotFoundError("Profile");
     }
     return profile;
   };
@@ -157,8 +155,13 @@ const profileService = () => {
     // Get experience fields from the body
     const newExp = getExperienceFields(body);
 
-    // Add experience to the profile and save
+    // Get profile or throw error if not found
     const profile = await Profile.findOne({ user: userId });
+    if (!profile) {
+      throw new NotFoundError("Profile");
+    }
+
+    // Add experience to the profile and save
     profile.experience.unshift(newExp);
     await profile.save();
 
@@ -166,16 +169,22 @@ const profileService = () => {
   };
 
   const deleteExperience = async (expId, userId) => {
-    // Get user profile
+    // Get user profile or throw error if not found
     const profile = await Profile.findOne({ user: userId });
+    if (!profile) {
+      throw new NotFoundError("Profile");
+    }
 
-    // Get index of item to remove
-    const removieIndex = profile.experience
+    // Get index of item to remove or throw error if not found
+    const removeIndex = profile.experience
       .map((item) => item.id)
       .indexOf(expId);
+    if (removeIndex === -1) {
+      throw new NotFoundError("Experience");
+    }
 
     // Remove item and save profile
-    profile.experience.splice(removieIndex, 1);
+    profile.experience.splice(removeIndex, 1);
     await profile.save();
 
     return profile;
@@ -185,8 +194,13 @@ const profileService = () => {
     // Get education fields from the body
     const newEdu = getEducationFields(body);
 
-    // Add education to the profile and save
+    // Get profile or throw error if not found
     const profile = await Profile.findOne({ user: userId });
+    if (!profile) {
+      throw new NotFoundError("Profile");
+    }
+
+    // Add education to the profile and save
     profile.education.unshift(newEdu);
     await profile.save();
 
@@ -194,16 +208,20 @@ const profileService = () => {
   };
 
   const deleteEducation = async (eduId, userId) => {
-    // Get user profile
+    // Get user profile or throw error if not found
     const profile = await Profile.findOne({ user: userId });
+    if (!profile) {
+      throw new NotFoundError("Profile");
+    }
 
     // Get index of item to remove
-    const removieIndex = profile.education
-      .map((item) => item.id)
-      .indexOf(eduId);
+    const removeIndex = profile.education.map((item) => item.id).indexOf(eduId);
+    if (removeIndex === -1) {
+      throw new NotFoundError("Education");
+    }
 
     // Remove item and save profile
-    profile.education.splice(removieIndex, 1);
+    profile.education.splice(removeIndex, 1);
     await profile.save();
 
     return profile;
@@ -223,6 +241,8 @@ const profileService = () => {
 
     // Call the github API and return the response data
     try {
+      // TODO: Fix this, read docs about errors
+      // https://docs.github.com/en/free-pro-team@latest/rest
       const gitHubResponse = await axios.get(uri, { headers });
       return gitHubResponse.data;
     } catch (err) {
