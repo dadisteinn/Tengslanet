@@ -15,7 +15,27 @@ class ObjectIdError extends NotFoundError {
   }
 }
 
+class ServerError extends Error {
+  constructor(log) {
+    super("Server error");
+    this.name = "Server error";
+    this.status = 500;
+    this.log = log;
+  }
+}
+
+class InvalidCredentialsError extends Error {
+  constructor(log) {
+    super("Login credentials are not valid");
+    this.name = "InvalidCredentialsError";
+    this.status = 401;
+    this.log = log;
+  }
+}
+
 module.exports = {
   NotFoundError,
   ObjectIdError,
+  ServerError,
+  InvalidCredentialsError,
 };
