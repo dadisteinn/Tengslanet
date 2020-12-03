@@ -143,7 +143,7 @@ const profileService = () => {
     return profile;
   };
 
-  const deleteProfileById = async (userId) => {
+  const deleteProfile = async (userId) => {
     // TODO: Remove users posts
 
     // Remove profile
@@ -236,7 +236,7 @@ const profileService = () => {
     createOrUpdateProfile,
     getAllProfiles,
     getProfileByUserId,
-    deleteProfileById,
+    deleteProfile,
     addExperience,
     deleteExperience,
     addEducation,

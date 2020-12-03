@@ -92,8 +92,8 @@ router.get("/user/:userId", async (req, res) => {
 // @access  Private
 router.delete("/", auth, async (req, res) => {
   try {
-    await profileService.deleteProfileById(req.user.id);
-    return res.status(204).json({ msg: "User deleted" });
+    await profileService.deleteProfile(req.user.id);
+    return res.status(200).json({ msg: "User deleted" }); // TODO: 204 (nocontent) and no msg??
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server error");
