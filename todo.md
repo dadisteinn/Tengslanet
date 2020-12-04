@@ -1,3 +1,3 @@
-### API
+### Backend
 
-- Move api into /Backend folder
+### Frontend
