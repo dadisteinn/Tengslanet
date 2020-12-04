@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { JwtTokenError } from "../errors.js";
+import { UnauthorizedError } from "../errors.js";
 import "dotenv/config.js";
 
 export default function (req, res, next) {
@@ -8,7 +8,7 @@ export default function (req, res, next) {
 
   // Check if token exists
   if (!token) {
-    throw new JwtTokenError("No token, authorization denied");
+    throw new UnauthorizedError("No token, authorization denied");
   }
 
   // Verify token
@@ -17,6 +17,6 @@ export default function (req, res, next) {
     req.user = decodedToken.user;
     next();
   } catch (err) {
-    throw new JwtTokenError("Token is not valid");
+    throw new UnauthorizedError("Token is not valid");
   }
 }
