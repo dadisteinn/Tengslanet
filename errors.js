@@ -34,12 +34,21 @@ class InvalidCredentialsError extends Error {
   }
 }
 
-class JwtTokenError extends Error {
+class UnauthorizedError extends Error {
   constructor(log) {
     super("Unauthorized");
-    this.name = "JWTAuthenticationError";
+    this.name = "UnauthorizedError";
     this.status = 401;
     this.log = log;
+  }
+}
+
+class BadRequestError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "BadRequestError";
+    this.status = 400;
+    this.log = message;
   }
 }
 
@@ -48,5 +57,6 @@ export {
   ObjectIdError,
   ServerError,
   InvalidCredentialsError,
-  JwtTokenError,
+  UnauthorizedError,
+  BadRequestError,
 };
