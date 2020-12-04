@@ -52,6 +52,15 @@ class BadRequestError extends Error {
   }
 }
 
+class ConflictError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ConflictError";
+    this.status = 409;
+    this.log = message;
+  }
+}
+
 export {
   NotFoundError,
   ObjectIdError,
@@ -59,4 +68,5 @@ export {
   InvalidCredentialsError,
   UnauthorizedError,
   BadRequestError,
+  ConflictError,
 };

@@ -2,8 +2,7 @@ import express from "express";
 import connectDB from "./data/db.js";
 import { pageNotFound, errorHandler } from "./middleware/errorMiddleware.js";
 
-import usersRoutes from "./routes/usersRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
+import accounthRoutes from "./routes/accountRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import postsRoutes from "./routes/postsRoutes.js";
 
@@ -20,8 +19,7 @@ app.use(express.json({ extended: false }));
 app.get("/", (req, res) => res.send("API running"));
 
 // Define routes
-app.use("/api/users", usersRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/api/account", accounthRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/posts", postsRoutes);
 
