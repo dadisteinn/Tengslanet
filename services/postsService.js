@@ -1,6 +1,6 @@
-const Post = require("../models/Post");
-const User = require("../models/User");
-const Profile = require("../models/Profile");
+import Post from "../models/Post.js";
+import User from "../models/User.js";
+import Profile from "../models/Profile.js";
 
 const postsService = () => {
   const createPost = async (userId, text) => {
@@ -53,4 +53,4 @@ const postsService = () => {
   };
 };
 
-module.exports = postsService();
+export default postsService();

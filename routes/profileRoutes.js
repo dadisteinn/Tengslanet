@@ -1,10 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const { check, validationResult } = require("express-validator");
+import express from "express";
+import { check, validationResult } from "express-validator";
+import auth from "../middleware/auth.js";
+import profileService from "../services/profileService.js";
+import { ServerError } from "../errors.js";
 
-const auth = require("../middleware/auth");
-const profileService = require("../services/profileService");
-const { ServerError } = require("../errors");
+const router = express.Router();
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -221,4 +221,4 @@ router.get("/github/:username", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,11 +1,10 @@
-const express = require("express");
+import express from "express";
+import { check, validationResult } from "express-validator";
+import auth from "../middleware/auth.js";
+import authservice from "../services/authService.js";
+import { ServerError } from "../errors.js";
+
 const router = express.Router();
-const { check, validationResult } = require("express-validator");
-
-const auth = require("../middleware/auth");
-const authservice = require("../services/authService");
-const { ServerError } = require("../errors");
-
 // @route    GET api/auth
 // @desc     Get user by token
 // @access   Private
@@ -50,4 +49,4 @@ router.post(
   }
 );
 
-module.exports = router;
+export default router;

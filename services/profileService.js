@@ -1,9 +1,8 @@
-const Profile = require("../models/Profile");
-const User = require("../models/User");
-const axios = require("axios");
-require("dotenv").config();
-
-const { NotFoundError } = require("../errors");
+import axios from "axios";
+import Profile from "../models/Profile.js";
+import User from "../models/User.js";
+import { NotFoundError } from "../errors.js";
+import "dotenv/config.js";
 
 const profileService = () => {
   const getProfileFields = (body, userId) => {
@@ -265,4 +264,4 @@ const profileService = () => {
   };
 };
 
-module.exports = profileService();
+export default profileService();
