@@ -26,9 +26,11 @@ Coming up!
 - [Express.js] - A minimal and flexible Node.js web application framework
 - [MongoDB] - A cross-platform document-oriented database program
 - [JWT] - A compact URL-safe means of representing claims to be transferred between two parties
+- [Github API] - Create calls to get the data you need to integrate with GitHub
 
 [Node.js]: http://nodejs.org
 [MongoDB]: https://www.mongodb.com
 [Express.js]: http://expressjs.com
 [JWT]: https://jwt.io/
 [React]: https://reactjs.org
+[Github API]: https://docs.github.com/en/free-pro-team@latest/rest.
