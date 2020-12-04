@@ -232,22 +232,14 @@ const profileService = () => {
       `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc`
     );
     // Get github token
-
     const headers = {
       "user-agent": "node.js",
       Authorization: `token ${process.env.GITHUBTOKEN}`,
     };
 
     // Call the github API and return the response data
-    try {
-      // TODO: Fix this, read docs about errors
-      // https://docs.github.com/en/free-pro-team@latest/rest
-      const gitHubResponse = await axios.get(uri, { headers });
-      return gitHubResponse.data;
-    } catch (err) {
-      console.error(err.message);
-      return null;
-    }
+    const gitHubResponse = await axios.get(uri, { headers });
+    return gitHubResponse.data;
   };
 
   return {

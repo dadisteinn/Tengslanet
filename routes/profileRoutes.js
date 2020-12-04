@@ -2,7 +2,7 @@ import express from "express";
 import { check, validationResult } from "express-validator";
 import auth from "../middleware/authMiddleware.js";
 import profileService from "../services/profileService.js";
-import { ServerError } from "../errors.js";
+import { NotFoundError, ServerError } from "../errors.js";
 
 const router = express.Router();
 
@@ -207,13 +207,10 @@ router.delete("/education/:eduId", auth, async (req, res, next) => {
 router.get("/github/:username", async (req, res, next) => {
   try {
     const data = await profileService.getGitrepos(req.params.username);
-    if (!data) {
-      return res.status(404).json({ msg: "No github profile found" });
-    }
     return res.status(200).json(data);
   } catch (error) {
-    if (error.log) {
-      // TODO: needed?
+    if (error.response.status === 404) {
+      error = new NotFoundError("Github profile");
       return next(error);
     }
     error = new ServerError(error.message);
