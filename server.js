@@ -1,7 +1,9 @@
 import express from "express";
 import connectDB from "./data/db.js";
-import globalErrorHandler from "./middleware/globalErrorHandler.js";
-import { NotFoundError } from "./errors.js";
+import {
+  pageNotFoundHandler,
+  globalErrorHandler,
+} from "./middleware/ErrorHandlerMiddleware.js";
 
 import usersRoutes from "./routes/usersRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -26,11 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/posts", postsRoutes);
 
-app.use((req, res, next) => {
-  const error = new NotFoundError("Page");
-  next(error);
-});
-
+app.use(pageNotFoundHandler);
 app.use(globalErrorHandler);
 
 app.listen(PORT, () => console.log(`Server starter on port ${PORT}`));

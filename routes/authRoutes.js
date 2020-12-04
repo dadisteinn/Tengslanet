@@ -1,6 +1,6 @@
 import express from "express";
 import { check, validationResult } from "express-validator";
-import auth from "../middleware/auth.js";
+import auth from "../middleware/authMiddleware.js";
 import authservice from "../services/authService.js";
 import { ServerError } from "../errors.js";
 
