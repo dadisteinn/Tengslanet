@@ -1,9 +1,6 @@
 import express from "express";
 import connectDB from "./data/db.js";
-import {
-  pageNotFoundHandler,
-  globalErrorHandler,
-} from "./middleware/ErrorHandlerMiddleware.js";
+import { pageNotFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 import usersRoutes from "./routes/usersRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -28,7 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/posts", postsRoutes);
 
-app.use(pageNotFoundHandler);
-app.use(globalErrorHandler);
+app.use(pageNotFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server starter on port ${PORT}`));
