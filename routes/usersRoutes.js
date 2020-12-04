@@ -1,9 +1,8 @@
-const express = require("express");
-const { check, validationResult } = require("express-validator");
+import express from "express";
+import { check, validationResult } from "express-validator";
+import userService from "../services/userService.js";
 
 const router = express.Router();
-
-const userService = require("../services/userService");
 
 // @route   POST api/users
 // @desc    Register user
@@ -36,4 +35,4 @@ router.post(
   }
 );
 
-module.exports = router;
+export default router;

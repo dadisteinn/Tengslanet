@@ -1,4 +1,4 @@
-module.exports = function (error, req, res, next) {
+export default function (error, req, res, next) {
   console.log("Error: ");
   console.error(error.log);
   res.status(error.status || 500);
@@ -7,4 +7,4 @@ module.exports = function (error, req, res, next) {
       message: error.message,
     },
   });
-};
+}

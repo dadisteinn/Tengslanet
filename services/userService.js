@@ -1,8 +1,8 @@
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import gravatar from "gravatar";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+import "dotenv/config.js";
 
 const userService = () => {
   const registerUser = async (body) => {
@@ -54,4 +54,4 @@ const userService = () => {
   };
 };
 
-module.exports = userService();
+export default userService();

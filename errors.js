@@ -43,7 +43,7 @@ class JwtTokenError extends Error {
   }
 }
 
-module.exports = {
+export {
   NotFoundError,
   ObjectIdError,
   ServerError,

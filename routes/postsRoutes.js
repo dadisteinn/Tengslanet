@@ -1,9 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const { check, validationResult } = require("express-validator");
+import express from "express";
+import { check, validationResult } from "express-validator";
+import auth from "../middleware/auth.js";
+import postsService from "../services/postsService.js";
 
-const auth = require("../middleware/auth");
-const postsService = require("../services/postsService");
+const router = express.Router();
 
 // @route   POST api/posts
 // @desc    Create a post
@@ -72,4 +72,4 @@ router.delete("/:postId", auth, async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,9 +1,8 @@
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import jwt from "jsonwebtoken";
+import { JwtTokenError } from "../errors.js";
+import "dotenv/config.js";
 
-const { JwtTokenError } = require("../errors");
-
-module.exports = function (req, res, next) {
+export default function (req, res, next) {
   // Get token from header
   const token = req.header("x-auth-token");
 
@@ -20,4 +19,4 @@ module.exports = function (req, res, next) {
   } catch (err) {
     throw new JwtTokenError("Token is not valid");
   }
-};
+}

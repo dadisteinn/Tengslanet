@@ -1,9 +1,8 @@
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-require("dotenv").config();
-
-const { InvalidCredentialsError, NotFoundError } = require("../errors");
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import User from "../models/User.js";
+import { InvalidCredentialsError, NotFoundError } from "../errors.js";
+import "dotenv/config.js";
 
 const authService = () => {
   const getAuthUser = async (userId) => {
@@ -50,4 +49,4 @@ const authService = () => {
   };
 };
 
-module.exports = authService();
+export default authService();
