@@ -6,7 +6,7 @@ import accountService from "../services/accountService.js";
 
 const router = express.Router();
 
-// @route   POST api/account
+// @route   POST api/account/register
 // @desc    Register new user
 // @access  Public
 router.post(
@@ -37,7 +37,7 @@ router.post(
   }
 );
 
-// @route   POST api/account
+// @route   POST api/account/signin
 // @desc    Signin user
 // @access  Public
 router.post(
